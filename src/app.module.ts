@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { ApplicationModule } from './application/application.module';
 import { AdaptersModule } from './adapters/adapters.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostgresConfigService } from './config/postgres.config.service';
+import { PostgresConfigService } from './adapters/config/postgres.config.service';
 import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
+import { FiltroDeExcecaoGlobal } from './filtros/filtro-de-excecao-global';
 
 @Module({
   imports: [
@@ -18,6 +20,11 @@ import { ConfigModule } from '@nestjs/config';
     }),
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: FiltroDeExcecaoGlobal,
+    },
+  ],
 })
 export class AppModule {}

@@ -12,8 +12,25 @@ export class ClientePersistAdapter implements ClientePersistPort {
 
   async saveCliente(cliente: Cliente): Promise<number> {
     const clienteEntity = new ClienteEntity();
-    clienteEntity.nome = cliente.nome;
+    Object.assign(clienteEntity, cliente);
     await this.usuarioRepository.save(clienteEntity);
-    return 1;
+    return clienteEntity.id;
+  }
+
+  getClienteByCpf(cpf: string): Promise<ClienteEntity> {
+    //regras de negócio
+    return this.usuarioRepository.findOneBy({ cpf });
+  }
+
+  async deleteCliente(cpf: string): Promise<void> {
+    const cliente = await this.getClienteByCpf(cpf);
+    this.usuarioRepository.delete(cliente.id);
+  }
+
+  async updateCliente(cpf: string, cliente: Cliente): Promise<Cliente> {
+    const clienteEntity = await this.getClienteByCpf(cpf);
+    Object.assign(clienteEntity, cliente);
+    await this.usuarioRepository.save(clienteEntity);
+    return cliente;
   }
 }

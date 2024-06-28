@@ -1,3 +1,5 @@
 export class Cliente {
-  constructor(readonly nome: string) {}
+  readonly nome: string;
+  readonly email: string;
+  readonly cpf: string;
 }

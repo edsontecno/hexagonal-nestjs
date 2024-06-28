@@ -8,7 +8,18 @@ export class ClienteService implements ClienteServicePort {
   constructor(private persist: ClientePersistPort) {}
 
   saveCliente(cliente: Cliente): Promise<number> {
-    //regras de negócio
     return this.persist.saveCliente(cliente);
+  }
+
+  getCliente(cpf: string): Promise<Cliente> {
+    return this.persist.getClienteByCpf(cpf);
+  }
+
+  deleteCliente(cpf: string): Promise<void> {
+    return this.persist.deleteCliente(cpf);
+  }
+
+  updateCliente(cpf: string, cliente: Cliente): Promise<Cliente> {
+    return this.persist.updateCliente(cpf, cliente);
   }
 }
