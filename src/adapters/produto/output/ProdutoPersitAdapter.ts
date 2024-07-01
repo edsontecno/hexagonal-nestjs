@@ -34,4 +34,16 @@ export class ProdutoPersistAdapter implements ProdutoPersistPort {
     await this.repository.save(entity);
     return produto;
   }
+  async findAllByCategoria(idCategoria: number): Promise<Produto[]> {
+    const result = [];
+    const list = await this.repository.find({
+      where: { categoria: { id: idCategoria } },
+    });
+    list.forEach((element) => {
+      const newProduto = new Produto();
+      Object.assign(newProduto, element);
+      result.push(newProduto);
+    });
+    return result;
+  }
 }

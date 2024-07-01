@@ -28,6 +28,11 @@ export class ProdutoController {
     return this.adapter.get(id);
   }
 
+  @Get('/categoria/:id')
+  findAllByCategoria(@Param('id') id: number) {
+    return this.adapter.findAllByCategoria(id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: number, @Body() produtoDto: CreateProdutoDto) {
     const produto = new Produto();

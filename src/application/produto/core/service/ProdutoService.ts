@@ -7,6 +7,10 @@ import { ProdutoPersistPort } from '../../ports/output/ProdutoPersistPort';
 export class ProdutoService implements ProdutoServicePort {
   constructor(private persist: ProdutoPersistPort) {}
 
+  findAllByCategoria(idCategoria: number): Promise<Produto[]> {
+    return this.persist.findAllByCategoria(idCategoria);
+  }
+
   save(categoria: Produto): Promise<number> {
     return this.persist.save(categoria);
   }
