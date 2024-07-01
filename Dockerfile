@@ -1,8 +1,8 @@
 FROM node:18
 
-RUN adduser fiap
+# RUN adduser fiap
 
-USER fiap
+# USER fiap
 
 WORKDIR /app
 
