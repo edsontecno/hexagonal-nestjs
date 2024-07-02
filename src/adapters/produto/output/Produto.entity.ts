@@ -16,19 +16,12 @@ export class ProdutoEntity {
     name: 'preco',
     nullable: false,
     type: 'decimal',
-    precision: 2,
+    precision: 10,
     scale: 2,
   })
   preco: number;
 
-  @Column({
-    name: 'preco',
-    nullable: false,
-    type: 'decimal',
-    precision: 2,
-    scale: 2,
-  })
-  @Column({ name: 'imagem', type: 'text', nullable: false })
+  @Column({ name: 'imagem', type: 'text', nullable: true })
   imagem: string;
 
   @ManyToOne(() => CategoriaEntity, (categoria) => categoria.produtos)
