@@ -35,6 +35,10 @@ export class PedidoService implements PedidoServicePort {
     return pedidoId;
   }
 
+  getAllByStatus(status): Promise<Pedido[]> {
+    return this.persist.getAllByStatus(status);
+  }
+
   async processPayment(pedidoId: number) {
     console.log('Processando pagamento....');
     await this.awaitPayment();
@@ -48,5 +52,14 @@ export class PedidoService implements PedidoServicePort {
         resolve();
       }, 30000);
     });
+  }
+
+  async changeStatus(id: number, status: StatusPedido) {
+    await this.persist.changeStatus(id, status);
+    return 'Pedido alterado';
+  }
+
+  getPedidoByCliente(cpf: any): Promise<Pedido[]> {
+    return this.persist.getPedidosByCliente(cpf);
   }
 }

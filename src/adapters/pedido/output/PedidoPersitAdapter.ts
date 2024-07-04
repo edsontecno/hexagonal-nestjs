@@ -9,6 +9,7 @@ import { ProdutoEntity } from 'src/adapters/produto/output/Produto.entity';
 import { Produto } from 'src/application/produto/core/domain/Produto';
 import { ProdutoServicePort } from 'src/application/produto/ports/input/ProdutoServicePort';
 import { StatusPedido } from 'src/application/pedido/core/domain/StatusPedido';
+import { Pedido } from 'src/application/pedido/core/domain/Pedido';
 
 export class PedidoPersistAdapter implements PedidoPersistPort {
   constructor(
@@ -44,5 +45,19 @@ export class PedidoPersistAdapter implements PedidoPersistPort {
     const pedido = await this.repository.findOneBy({ id });
     pedido.status = status;
     await this.repository.save(pedido);
+  }
+
+  getAllByStatus(status: StatusPedido) {
+    return this.repository.find({ where: { status } });
+  }
+  async changeStatus(id: number, status: StatusPedido) {
+    const pedido = await this.repository.findOneBy({ id });
+    pedido.status = status;
+    await this.repository.save(pedido);
+    return '';
+  }
+
+  getPedidosByCliente(cpf: string): Promise<Pedido[]> {
+    throw new Error('Method not implemented.');
   }
 }
