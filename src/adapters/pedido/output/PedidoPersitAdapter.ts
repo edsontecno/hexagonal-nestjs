@@ -57,7 +57,20 @@ export class PedidoPersistAdapter implements PedidoPersistPort {
     return '';
   }
 
-  getPedidosByCliente(cpf: string): Promise<Pedido[]> {
-    throw new Error('Method not implemented.');
+  async getPedidosByCliente(cpf: string): Promise<Pedido[]> {
+    const pedidosEntity = await this.repository.find({
+      where: {
+        cliente: {
+          cpf,
+        },
+      },
+    });
+    const pedidos: Pedido[] = [];
+    for (const item of pedidosEntity) {
+      const newPedido = new Pedido();
+      Object.assign(newPedido, item);
+      pedidos.push(newPedido);
+    }
+    return pedidos;
   }
 }
