@@ -11,8 +11,8 @@ export class ProdutoService implements ProdutoServicePort {
     return this.persist.findAllByCategoria(idCategoria);
   }
 
-  save(categoria: Produto): Promise<number> {
-    return this.persist.save(categoria);
+  save(produto: Produto): Promise<number> {
+    return this.persist.save(produto);
   }
   get(id: number): Promise<Produto> {
     return this.persist.get(id);
@@ -20,7 +20,7 @@ export class ProdutoService implements ProdutoServicePort {
   delete(id: number): Promise<void> {
     return this.persist.delete(id);
   }
-  update(id: number, categoria: Produto): Promise<Produto> {
-    return this.persist.update(id, categoria);
+  update(id: number, produto: Produto): Promise<Produto> {
+    return this.persist.update(id, produto);
   }
 }

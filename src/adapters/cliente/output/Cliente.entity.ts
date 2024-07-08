@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { PedidoEntity } from 'src/adapters/pedido/output/Pedido.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'clientes' })
 export class ClienteEntity {
@@ -13,4 +14,9 @@ export class ClienteEntity {
 
   @Column({ name: 'cpf', length: 11, nullable: false, unique: true })
   cpf: string;
+
+  @OneToMany(() => PedidoEntity, (pedido) => pedido.cliente, {
+    cascade: true,
+  })
+  pedidos: PedidoEntity[];
 }

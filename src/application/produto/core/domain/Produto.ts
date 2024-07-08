@@ -1,4 +1,5 @@
 export class Produto {
+  readonly id: number;
   readonly nome: string;
   readonly descricao: string;
   readonly preco: string;

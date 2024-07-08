@@ -10,10 +10,20 @@ import { ProdutoService } from 'src/application/produto/core/service/ProdutoServ
 import { ProdutoPersistPort } from 'src/application/produto/ports/output/ProdutoPersistPort';
 import { ProdutoPersistAdapter } from '../produto/output/ProdutoPersitAdapter';
 import { ProdutoEntity } from '../produto/output/Produto.entity';
+import { ClienteServicePort } from 'src/application/cliente/ports/input/ClienteServicePort';
+import { ClienteService } from 'src/application/cliente/core/service/ClienteService';
+import { ClientePersistPort } from 'src/application/cliente/ports/output/ClientePersistPort';
+import { ClientePersistAdapter } from '../cliente/output/ClientePersitAdapter';
+import { ClienteEntity } from '../cliente/output/Cliente.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PedidoEntity, ItemPedidoEntity, ProdutoEntity]),
+    TypeOrmModule.forFeature([
+      PedidoEntity,
+      ItemPedidoEntity,
+      ProdutoEntity,
+      ClienteEntity,
+    ]),
   ],
   controllers: [PedidoController],
   providers: [
@@ -26,6 +36,14 @@ import { ProdutoEntity } from '../produto/output/Produto.entity';
     {
       provide: ProdutoPersistPort,
       useClass: ProdutoPersistAdapter,
+    },
+    {
+      provide: ClienteServicePort,
+      useClass: ClienteService,
+    },
+    {
+      provide: ClientePersistPort,
+      useClass: ClientePersistAdapter,
     },
   ],
   exports: [

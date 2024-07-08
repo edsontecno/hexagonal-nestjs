@@ -10,12 +10,15 @@ import { Produto } from 'src/application/produto/core/domain/Produto';
 import { ProdutoServicePort } from 'src/application/produto/ports/input/ProdutoServicePort';
 import { StatusPedido } from 'src/application/pedido/core/domain/StatusPedido';
 import { Pedido } from 'src/application/pedido/core/domain/Pedido';
+import { ClienteServicePort } from 'src/application/cliente/ports/input/ClienteServicePort';
+import { Cliente } from 'src/application/cliente/core/domain/Cliente';
 
 export class PedidoPersistAdapter implements PedidoPersistPort {
   constructor(
     @InjectRepository(PedidoEntity)
     private readonly repository: Repository<PedidoEntity>,
     private readonly produtoService: ProdutoServicePort,
+    private readonly clienteService: ClienteServicePort,
   ) {}
 
   async save(pedido: PedidoProcessado): Promise<number> {
@@ -72,5 +75,9 @@ export class PedidoPersistAdapter implements PedidoPersistPort {
       pedidos.push(newPedido);
     }
     return pedidos;
+  }
+
+  getCliente(cpf): Promise<Cliente> {
+    return this.clienteService.getCliente(cpf);
   }
 }

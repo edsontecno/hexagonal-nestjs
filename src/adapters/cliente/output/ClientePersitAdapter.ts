@@ -17,9 +17,16 @@ export class ClientePersistAdapter implements ClientePersistPort {
     return clienteEntity.id;
   }
 
-  getClienteByCpf(cpf: string): Promise<ClienteEntity> {
-    //regras de negócio
-    return this.usuarioRepository.findOneBy({ cpf });
+  async getClienteByCpf(cpf: string): Promise<Cliente> {
+    const cliente = await this.usuarioRepository.findOne({
+      where: {
+        cpf,
+      },
+      relations: ['pedidos'],
+    });
+    const result = new Cliente();
+    Object.assign(result, cliente);
+    return result;
   }
 
   async deleteCliente(cpf: string): Promise<void> {
@@ -29,8 +36,11 @@ export class ClientePersistAdapter implements ClientePersistPort {
 
   async updateCliente(cpf: string, cliente: Cliente): Promise<Cliente> {
     const clienteEntity = await this.getClienteByCpf(cpf);
-    Object.assign(clienteEntity, cliente);
-    await this.usuarioRepository.save(clienteEntity);
+    const entity = new ClienteEntity();
+    Object.assign(entity, cliente);
+    entity.id = clienteEntity.id;
+
+    await this.usuarioRepository.save(entity);
     return cliente;
   }
 }
