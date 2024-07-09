@@ -1,5 +1,14 @@
 import { CreatePedidoDto } from './dto/create-pedido.dto';
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common';
 import { PedidoServicePort } from 'src/application/pedido/ports/input/PedidoServicePort';
 import {
   ApiBadRequestResponse,
@@ -10,6 +19,8 @@ import {
 import { ErrorResponseBody } from 'src/filtros/filtro-de-excecao-global';
 import { Pedido } from 'src/application/pedido/core/domain/Pedido';
 import { PedidoDto } from './dto/pedito.dto';
+import { Response } from 'express';
+import { MessageDTO } from 'src/adapters/dto/message.dto';
 
 @ApiTags('Pedido')
 @ApiBadRequestResponse({
@@ -43,12 +54,39 @@ export class PedidoController {
   }
 
   @Get('/cliente/:cpf')
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de pedidos por status',
+    type: [PedidoDto],
+  })
   getPedidoByCliente(@Param('cpf') cpf: string) {
     return this.adapter.getPedidoByCliente(cpf);
   }
 
   @Put(':id/alterar_status/:status')
-  changeStatus(@Param('id') id: string, @Param('status') status: string) {
-    return this.adapter.changeStatus(id, status);
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de pedidos por status',
+    type: MessageDTO,
+  })
+  async changeStatus(
+    @Param('id') id: string,
+    @Param('status') status: string,
+    @Res() response: Response,
+  ) {
+    const result = await this.adapter.changeStatus(id, status);
+    return response.status(HttpStatus.OK).json({
+      message: result,
+    });
+  }
+
+  @Get('status')
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de status disponíveis para o pedido',
+    type: [String],
+  })
+  async getListStatus() {
+    return await this.adapter.getListStatus();
   }
 }

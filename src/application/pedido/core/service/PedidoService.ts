@@ -124,10 +124,14 @@ export class PedidoService implements PedidoServicePort {
       throw new RegraNegocioException('Transição de status inválida');
     }
     await this.persist.changeStatus(id, status);
-    return 'Pedido alterado';
+    return 'Pedido alterado com sucesso';
   }
 
   getPedidoByCliente(cpf: any): Promise<Pedido[]> {
     return this.persist.getPedidosByCliente(cpf);
+  }
+
+  getListStatus(): string[] {
+    return Object.values(StatusPedido);
   }
 }

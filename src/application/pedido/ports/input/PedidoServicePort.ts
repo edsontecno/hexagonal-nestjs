@@ -5,4 +5,5 @@ export abstract class PedidoServicePort {
   abstract getAllByStatus(status): Promise<Pedido[]>;
   abstract changeStatus(id, status): Promise<string>;
   abstract getPedidoByCliente(cpf): Promise<Pedido[]>;
+  abstract getListStatus(): string[];
 }

@@ -70,6 +70,7 @@ export class PedidoPersistAdapter implements PedidoPersistPort {
           cpf,
         },
       },
+      relations: ['itensPedido', 'cliente', 'itensPedido.produto'],
     });
     const pedidos: Pedido[] = [];
     for (const item of pedidosEntity) {
