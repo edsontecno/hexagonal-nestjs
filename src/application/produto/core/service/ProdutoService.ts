@@ -37,13 +37,29 @@ export class ProdutoService extends Service implements ProdutoServicePort {
     return this.persist.findCategoriaById(categoriaId);
   }
 
-  get(id: number): Promise<Produto> {
+  async get(id: number): Promise<Produto> {
+    const produto = await this.persist.get(id);
+    if (produto.id === undefined) {
+      throw new RegraNegocioException('Produto não localizado');
+    }
     return this.persist.get(id);
   }
-  delete(id: number): Promise<void> {
-    return this.persist.delete(id);
+
+  async delete(id: number): Promise<void> {
+    try {
+      await this.persist.delete(id);
+    } catch (error) {
+      if (error.message === 'PRODUTO_VINCULADO') {
+        throw new RegraNegocioException(
+          'Não é possível deletar produtos vinculados à pedidos',
+        );
+      }
+    }
+    return;
   }
-  update(id: number, produto: Produto): Promise<Produto> {
+
+  async update(id: number, produto: Produto): Promise<Produto> {
+    await this.checkFields(produto);
     return this.persist.update(id, produto);
   }
 }

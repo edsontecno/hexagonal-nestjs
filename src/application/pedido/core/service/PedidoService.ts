@@ -71,6 +71,9 @@ export class PedidoService implements PedidoServicePort {
   }
 
   getAllByStatus(status): Promise<Pedido[]> {
+    if (!Object.values(StatusPedido).includes(status as StatusPedido)) {
+      throw new RegraNegocioException('O status informado é inválido');
+    }
     return this.persist.getAllByStatus(status);
   }
 

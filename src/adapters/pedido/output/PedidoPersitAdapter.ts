@@ -51,7 +51,10 @@ export class PedidoPersistAdapter implements PedidoPersistPort {
   }
 
   getAllByStatus(status: StatusPedido) {
-    return this.repository.find({ where: { status } });
+    return this.repository.find({
+      where: { status },
+      relations: ['itensPedido', 'cliente', 'itensPedido.produto'],
+    });
   }
   async changeStatus(id: number, status: StatusPedido) {
     const pedido = await this.repository.findOneBy({ id });

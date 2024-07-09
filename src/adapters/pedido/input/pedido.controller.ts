@@ -1,8 +1,22 @@
+import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { PedidoServicePort } from 'src/application/pedido/ports/input/PedidoServicePort';
-import { CreatePedidoDto } from '../input/dto/create-pedido.dto';
+import {
+  ApiBadRequestResponse,
+  ApiInternalServerErrorResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ErrorResponseBody } from 'src/filtros/filtro-de-excecao-global';
 import { Pedido } from 'src/application/pedido/core/domain/Pedido';
+import { PedidoDto } from './dto/pedito.dto';
 
+@ApiTags('Pedido')
+@ApiBadRequestResponse({
+  description: 'Detalhe do erro',
+  type: ErrorResponseBody,
+})
+@ApiInternalServerErrorResponse({ description: 'Erro do servidor' })
 @Controller('pedido')
 export class PedidoController {
   constructor(private readonly adapter: PedidoServicePort) {}
@@ -16,6 +30,11 @@ export class PedidoController {
   }
 
   @Get('/status/:status')
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de pedidos por status',
+    type: [PedidoDto],
+  })
   getAll(@Param('status') status: string) {
     return this.adapter.getAllByStatus(status);
   }

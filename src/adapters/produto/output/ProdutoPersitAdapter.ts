@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProdutoPersistPort } from 'src/application/produto/ports/output/ProdutoPersistPort';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { ProdutoEntity } from './Produto.entity';
 import { Produto } from 'src/application/produto/core/domain/Produto';
 import { Categoria } from 'src/application/categoria/core/domain/Categoria';
@@ -29,8 +29,17 @@ export class ProdutoPersistAdapter implements ProdutoPersistPort {
     return this.repository.findOneBy({ id });
   }
   async delete(id: number): Promise<void> {
-    const entity = await this.getEntity(id);
-    this.repository.delete(entity.id);
+    try {
+      const entity = await this.getEntity(id);
+      await this.repository.delete(entity.id);
+    } catch (error) {
+      if (
+        error instanceof QueryFailedError &&
+        error.message.includes('violates foreign key constraint')
+      ) {
+        throw new Error('PRODUTO_VINCULADO');
+      }
+    }
   }
   async update(id: number, produto: Produto): Promise<Produto> {
     const entity = await this.getEntity(id);

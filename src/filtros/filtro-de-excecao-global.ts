@@ -7,6 +7,16 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { RegraNegocioException } from './RegraNegocioException';
+import { ApiProperty } from '@nestjs/swagger';
+
+export class ErrorResponseBody {
+  @ApiProperty()
+  message?: string | object;
+  @ApiProperty()
+  timestamp?: string;
+  @ApiProperty()
+  path?: string;
+}
 
 @Catch()
 export class FiltroDeExcecaoGlobal implements ExceptionFilter {
@@ -22,7 +32,7 @@ export class FiltroDeExcecaoGlobal implements ExceptionFilter {
     const requisicao = contexto.getRequest();
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let body: any = {
+    let body: ErrorResponseBody = {
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(requisicao),
     };
@@ -40,23 +50,10 @@ export class FiltroDeExcecaoGlobal implements ExceptionFilter {
 
     if (excecao instanceof HttpException) {
       status = excecao.getStatus();
-      body = excecao.getResponse();
+      body = {
+        message: excecao.getResponse(),
+      };
     }
-
-    // const { status, body } =
-    //   excecao instanceof HttpException
-    //     ? {
-    //         status: excecao.getStatus(),
-    //         body: excecao.getResponse(),
-    //       }
-    //     : {
-    //         status: HttpStatus.INTERNAL_SERVER_ERROR,
-    //         body: {
-    //           statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-    //           timestamp: new Date().toISOString(),
-    //           path: httpAdapter.getRequestUrl(requisicao),
-    //         },
-    //       };
 
     httpAdapter.reply(resposta, body, status);
   }

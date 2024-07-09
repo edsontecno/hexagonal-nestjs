@@ -29,6 +29,15 @@ export class CategoriaService extends Service implements CategoriaServicePort {
     );
     return categoria;
   }
+  async getSigle(id: number): Promise<Categoria> {
+    const categoria = await this.persist.getSigle(id);
+    this.checkField(
+      categoria.id,
+      'Não foi possível encontrar a categoria informada',
+    );
+    return categoria;
+  }
+
   async delete(id: number): Promise<void> {
     const categoria = await this.get(id);
 

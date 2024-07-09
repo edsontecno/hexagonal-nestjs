@@ -12,17 +12,16 @@ export class ClienteService extends Service implements ClienteServicePort {
     super();
   }
 
-  async saveCliente(cliente: Cliente): Promise<number> {
+  async saveCliente(cliente: Cliente): Promise<void> {
     this.validarRegrasCliente(cliente);
 
     const clientePesquisado = await this.getCliente(cliente.cpf);
 
-    if (clientePesquisado) {
+    if (clientePesquisado.id !== undefined) {
       throw new RegraNegocioException('CPF já cadastrado na base de dados');
     }
 
     await this.persist.saveCliente(cliente);
-    return;
   }
 
   private validarRegrasCliente(cliente: Cliente) {
@@ -37,11 +36,7 @@ export class ClienteService extends Service implements ClienteServicePort {
   }
 
   private validarCpfObrigatorio(cpf: string) {
-    if (!cpf || cpf === '') {
-      throw new RegraNegocioException(
-        'Campo cpf é de preenchimento obrigatório',
-      );
-    }
+    this.validField(cpf, 'cpf');
   }
 
   getCliente(cpf: string): Promise<Cliente> {
@@ -52,19 +47,19 @@ export class ClienteService extends Service implements ClienteServicePort {
   async deleteCliente(cpf: string): Promise<void> {
     this.validarCpfObrigatorio(cpf);
     const cliente = await this.cpfExiste(cpf);
-    console.log(cliente);
-    if (cliente.pedidos) {
+
+    if (cliente.pedidos.length > 0) {
       throw new RegraNegocioException(
         'Não é possível deletar clientes com pedidos vinculados',
       );
     }
-    return;
+
+    this.persist.deleteCliente(cpf);
   }
 
   private async cpfExiste(cpf: string) {
     const clientePesquisado = await this.getCliente(cpf);
-    console.log(clientePesquisado.cpf);
-    if (!clientePesquisado || clientePesquisado.cpf === undefined) {
+    if (clientePesquisado.cpf === undefined) {
       throw new RegraNegocioException('CPF não localizado na base de dados');
     }
 

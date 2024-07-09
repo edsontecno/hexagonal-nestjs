@@ -27,6 +27,12 @@ export class CategoriaPersistAdapter implements CategoriaPersistPort {
     Object.assign(categoria, categoriaEntity);
     return categoria;
   }
+  async getSigle(id: number): Promise<Categoria> {
+    const categoriaEntity = await this.repository.findOneBy({ id });
+    const categoria = new Categoria();
+    Object.assign(categoria, categoriaEntity);
+    return categoria;
+  }
   async delete(id: number): Promise<void> {
     const entity = await this.get(id);
     this.repository.delete(entity.id);
@@ -39,28 +45,4 @@ export class CategoriaPersistAdapter implements CategoriaPersistPort {
     await this.repository.save(entity);
     return categoriaPesquisado;
   }
-
-  // async saveCliente(cliente: Cliente): Promise<number> {
-  //   const clienteEntity = new ClienteEntity();
-  //   Object.assign(clienteEntity, cliente);
-  //   await this.usuarioRepository.save(clienteEntity);
-  //   return clienteEntity.id;
-  // }
-
-  // getClienteByCpf(cpf: string): Promise<ClienteEntity> {
-  //   //regras de negócio
-  //   return this.usuarioRepository.findOneBy({ cpf });
-  // }
-
-  // async deleteCliente(cpf: string): Promise<void> {
-  //   const cliente = await this.getClienteByCpf(cpf);
-  //   this.usuarioRepository.delete(cliente.id);
-  // }
-
-  // async updateCliente(cpf: string, cliente: Cliente): Promise<Cliente> {
-  //   const clienteEntity = await this.getClienteByCpf(cpf);
-  //   Object.assign(clienteEntity, cliente);
-  //   await this.usuarioRepository.save(clienteEntity);
-  //   return cliente;
-  // }
 }
