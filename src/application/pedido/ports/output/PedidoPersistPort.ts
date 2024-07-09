@@ -12,4 +12,5 @@ export abstract class PedidoPersistPort {
   abstract changeStatus(id: number, status: StatusPedido): Promise<string>;
   abstract getPedidosByCliente(cpf: string): Promise<Pedido[]>;
   abstract getCliente(id: string): Promise<Cliente>;
+  abstract get(id: number): Promise<Pedido>;
 }

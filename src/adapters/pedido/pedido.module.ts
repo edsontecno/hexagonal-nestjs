@@ -15,6 +15,11 @@ import { ClienteService } from 'src/application/cliente/core/service/ClienteServ
 import { ClientePersistPort } from 'src/application/cliente/ports/output/ClientePersistPort';
 import { ClientePersistAdapter } from '../cliente/output/ClientePersitAdapter';
 import { ClienteEntity } from '../cliente/output/Cliente.entity';
+import { CategoriaServicePort } from 'src/application/categoria/ports/input/CategoriaServicePort';
+import { CategoriaService } from 'src/application/categoria/core/service/CategoriaService';
+import { CategoriaPersistPort } from 'src/application/categoria/ports/output/CategoriaPersistPort';
+import { CategoriaPersistAdapter } from '../categoria/output/CategoriaPersitAdapter';
+import { CategoriaEntity } from '../categoria/output/Categoria.entity';
 
 @Module({
   imports: [
@@ -23,6 +28,7 @@ import { ClienteEntity } from '../cliente/output/Cliente.entity';
       ItemPedidoEntity,
       ProdutoEntity,
       ClienteEntity,
+      CategoriaEntity,
     ]),
   ],
   controllers: [PedidoController],
@@ -44,6 +50,14 @@ import { ClienteEntity } from '../cliente/output/Cliente.entity';
     {
       provide: ClientePersistPort,
       useClass: ClientePersistAdapter,
+    },
+    {
+      provide: CategoriaServicePort,
+      useClass: CategoriaService,
+    },
+    {
+      provide: CategoriaPersistPort,
+      useClass: CategoriaPersistAdapter,
     },
   ],
   exports: [

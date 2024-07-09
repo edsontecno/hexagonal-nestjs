@@ -1,4 +1,4 @@
-import { PedidoEntity } from 'src/adapters/pedido/output/Pedido.entity';
+import { PedidoEntity } from '../../pedido/output/Pedido.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'clientes' })

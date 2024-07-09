@@ -5,7 +5,7 @@ export class Pedido1719868093380 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "itens_pedidos" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "quantidade" integer NOT NULL, "preco_venda" numeric(10,2) NOT NULL, "pedidoId" integer, "produtoId" integer, CONSTRAINT "PK_d93e780d333fe5d91e43797e8b5" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "itens_pedidos" ("id" SERIAL NOT NULL, "quantidade" integer NOT NULL, "preco_venda" numeric(10,2) NOT NULL, "pedidoId" integer, "produtoId" integer, CONSTRAINT "PK_d93e780d333fe5d91e43797e8b5" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TYPE "public"."pedidos_status_enum" AS ENUM('pendente', 'pagamento processado', 'em andamento', 'concluído', 'entregue', 'cancelado')`,

@@ -4,10 +4,13 @@ import { ClienteServicePort } from '../../ports/input/ClienteServicePort';
 import { ClientePersistPort } from '../../ports/output/ClientePersistPort';
 import { RegraNegocioException } from 'src/filtros/RegraNegocioException';
 import { cpf } from 'cpf-cnpj-validator';
+import { Service } from 'src/application/service/service';
 
 @Injectable()
-export class ClienteService implements ClienteServicePort {
-  constructor(private persist: ClientePersistPort) {}
+export class ClienteService extends Service implements ClienteServicePort {
+  constructor(private persist: ClientePersistPort) {
+    super();
+  }
 
   async saveCliente(cliente: Cliente): Promise<number> {
     this.validarRegrasCliente(cliente);
@@ -23,17 +26,8 @@ export class ClienteService implements ClienteServicePort {
   }
 
   private validarRegrasCliente(cliente: Cliente) {
-    if (!cliente.nome) {
-      throw new RegraNegocioException(
-        'Campo nome é de preenchimento obrigatório',
-      );
-    }
-
-    if (!cliente.email) {
-      throw new RegraNegocioException(
-        'Campo email é de preenchimento obrigatório',
-      );
-    }
+    this.validField(cliente.nome, 'nome');
+    this.validField(cliente.email, 'email');
 
     this.validarCpfObrigatorio(cliente.cpf);
 

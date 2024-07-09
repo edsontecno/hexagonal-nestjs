@@ -15,18 +15,29 @@ export class CategoriaPersistAdapter implements CategoriaPersistPort {
     await this.repository.save(entity);
     return entity.id;
   }
-  get(id: number): Promise<CategoriaEntity> {
-    return this.repository.findOneBy({ id });
+
+  async get(id: number): Promise<Categoria> {
+    const categoriaEntity = await this.repository.findOne({
+      where: {
+        id,
+      },
+      relations: ['produtos'],
+    });
+    const categoria = new Categoria();
+    Object.assign(categoria, categoriaEntity);
+    return categoria;
   }
   async delete(id: number): Promise<void> {
     const entity = await this.get(id);
     this.repository.delete(entity.id);
   }
   async update(id: number, categoria: Categoria): Promise<Categoria> {
-    const entity = await this.get(id);
+    const entity = new CategoriaEntity();
+    const categoriaPesquisado = await this.get(id);
+    Object.assign(entity, categoriaPesquisado);
     Object.assign(entity, categoria);
     await this.repository.save(entity);
-    return categoria;
+    return categoriaPesquisado;
   }
 
   // async saveCliente(cliente: Cliente): Promise<number> {

@@ -19,6 +19,7 @@ export class PedidoService implements PedidoServicePort {
 
     if (pedido.clienteId) {
       const cliente = await this.persist.getCliente(pedido.clienteId);
+      console.log(cliente);
       if (cliente.id === undefined) {
         throw new RegraNegocioException(
           'Cliente informado não existe na base de dados',
@@ -88,7 +89,37 @@ export class PedidoService implements PedidoServicePort {
     });
   }
 
+  private statusPermitidos = {
+    [StatusPedido.Pendente]: [
+      StatusPedido.PagamentoProcessado,
+      StatusPedido.Cancelado,
+    ],
+    [StatusPedido.PagamentoProcessado]: [
+      StatusPedido.EmAndamento,
+      StatusPedido.Cancelado,
+    ],
+    [StatusPedido.EmAndamento]: [
+      StatusPedido.Concluido,
+      StatusPedido.Cancelado,
+    ],
+    [StatusPedido.Concluido]: [StatusPedido.Entregue],
+    [StatusPedido.Entregue]: [],
+    [StatusPedido.Cancelado]: [],
+  };
+
+  checkTranstionStatus(
+    statusAtual: StatusPedido,
+    novoStatus: StatusPedido,
+  ): boolean {
+    const statusPossiveis = this.statusPermitidos[statusAtual];
+    return statusPossiveis.includes(novoStatus);
+  }
+
   async changeStatus(id: number, status: StatusPedido) {
+    const pedido = await this.persist.get(id);
+    if (!this.checkTranstionStatus(pedido.status, status)) {
+      throw new RegraNegocioException('Transição de status inválida');
+    }
     await this.persist.changeStatus(id, status);
     return 'Pedido alterado';
   }

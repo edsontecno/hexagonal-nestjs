@@ -80,4 +80,11 @@ export class PedidoPersistAdapter implements PedidoPersistPort {
   getCliente(cpf): Promise<Cliente> {
     return this.clienteService.getCliente(cpf);
   }
+
+  async get(id: number): Promise<Pedido> {
+    const entity = await this.repository.findOneBy({ id });
+    const pedido = new Pedido();
+    Object.assign(pedido, entity);
+    return pedido;
+  }
 }

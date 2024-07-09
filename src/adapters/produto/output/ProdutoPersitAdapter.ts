@@ -3,12 +3,16 @@ import { ProdutoPersistPort } from 'src/application/produto/ports/output/Produto
 import { Repository } from 'typeorm';
 import { ProdutoEntity } from './Produto.entity';
 import { Produto } from 'src/application/produto/core/domain/Produto';
+import { Categoria } from 'src/application/categoria/core/domain/Categoria';
+import { CategoriaServicePort } from 'src/application/categoria/ports/input/CategoriaServicePort';
 
 export class ProdutoPersistAdapter implements ProdutoPersistPort {
   constructor(
     @InjectRepository(ProdutoEntity)
     private readonly repository: Repository<ProdutoEntity>,
+    private readonly categoriaService: CategoriaServicePort,
   ) {}
+
   async save(produto: Produto): Promise<number> {
     const entity = new ProdutoEntity();
     Object.assign(entity, produto);
@@ -45,5 +49,9 @@ export class ProdutoPersistAdapter implements ProdutoPersistPort {
       result.push(newProduto);
     });
     return result;
+  }
+
+  findCategoriaById(categoriaId: number): Promise<Categoria> {
+    return this.categoriaService.get(categoriaId);
   }
 }
