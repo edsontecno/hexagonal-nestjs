@@ -37,6 +37,8 @@ services:
       retries: 3  
     ports:
       - "5432:5432"
+    volumes:
+       - postgres-fiap:/data/postgres  
     networks:
       - fiap
     restart: unless-stopped
@@ -44,3 +46,6 @@ services:
 networks:
   fiap:
     driver: bridge
+
+volumes:
+    postgres-fiap:    

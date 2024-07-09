@@ -22,11 +22,14 @@ export class PedidoController {
   constructor(private readonly adapter: PedidoServicePort) {}
 
   @Post()
-  save(@Body() pedidoDto: CreatePedidoDto) {
+  @ApiResponse({
+    status: 201,
+    description: 'Pedido salvo',
+  })
+  async save(@Body() pedidoDto: CreatePedidoDto) {
     const pedido = new Pedido();
     Object.assign(pedido, pedidoDto);
-
-    return this.adapter.save(pedido);
+    await this.adapter.save(pedido);
   }
 
   @Get('/status/:status')
