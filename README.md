@@ -1,5 +1,12 @@
 # API Lanchonete 4 amigos
 
+## Integrantes do grupo 22 
+- Edson Pereira de Andrade
+- Evelly Cristina Cramolish Palombo Santos 
+- Gabriel Fernandes Lazari 
+- Marcelo Rodrigues
+
+## Tecnologias
 Essa api foi desenvolvivida usando as seguintes tecnologias:
  - Nestjs;
  - TypeORM;
