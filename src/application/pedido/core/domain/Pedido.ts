@@ -1,8 +1,11 @@
+'use strict';
+
 import { ItemPedido } from './ItemPedido';
 import { StatusPedido } from './StatusPedido';
 
 export class Pedido {
-  itens: [ItemPedido];
-  clienteId: string;
-  status: StatusPedido;
+  readonly itens: [ItemPedido];
+  readonly clienteId: string;
+  readonly status: StatusPedido;
+  readonly awaitTime: string;
 }

@@ -6,6 +6,7 @@ import { PedidoProcessado } from '../domain/PedidoProcessado';
 import { StatusPedido } from '../domain/StatusPedido';
 import { ItemPedido } from '../domain/ItemPedido';
 import { RegraNegocioException } from 'src/filtros/RegraNegocioException';
+import { timeInMinutes } from 'src/application/utils/utils';
 
 @Injectable()
 export class PedidoService implements PedidoServicePort {
@@ -70,18 +71,31 @@ export class PedidoService implements PedidoServicePort {
     }
   }
 
-  getAllByStatus(status): Promise<Pedido[]> {
+  async getAllByStatus(status): Promise<Pedido[]> {
+    this.isStatusValid(status);
+    const pedidos = await this.persist.getAllByStatus(status);
+    this.addAwaitTimeOnOrders(pedidos);
+    return pedidos;
+  }
+
+  private addAwaitTimeOnOrders(pedidos: any) {
+    pedidos.map(
+      (pedido) =>
+        (pedido.awaitTime = timeInMinutes(pedido.createdAt, new Date())),
+    );
+  }
+
+  private isStatusValid(status: any) {
     if (!Object.values(StatusPedido).includes(status as StatusPedido)) {
       throw new RegraNegocioException('O status informado é inválido');
     }
-    return this.persist.getAllByStatus(status);
   }
 
   async processPayment(pedidoId: number) {
     console.log('Processando pagamento....');
     await this.awaitPayment();
     console.log('Pagamento processado');
-    this.persist.changeStatusPedido(pedidoId, StatusPedido.PagamentoProcessado);
+    this.persist.changeStatusPedido(pedidoId, StatusPedido.Recebido);
   }
 
   awaitPayment() {
@@ -93,24 +107,15 @@ export class PedidoService implements PedidoServicePort {
   }
 
   private statusPermitidos = {
-    [StatusPedido.Pendente]: [
-      StatusPedido.PagamentoProcessado,
-      StatusPedido.Cancelado,
-    ],
-    [StatusPedido.PagamentoProcessado]: [
-      StatusPedido.EmAndamento,
-      StatusPedido.Cancelado,
-    ],
-    [StatusPedido.EmAndamento]: [
-      StatusPedido.Concluido,
-      StatusPedido.Cancelado,
-    ],
-    [StatusPedido.Concluido]: [StatusPedido.Entregue],
-    [StatusPedido.Entregue]: [],
+    [StatusPedido.Pendente]: [StatusPedido.Recebido, StatusPedido.Cancelado],
+    [StatusPedido.Recebido]: [StatusPedido.EmAndamento, StatusPedido.Cancelado],
+    [StatusPedido.EmAndamento]: [StatusPedido.Pronto, StatusPedido.Cancelado],
+    [StatusPedido.Pronto]: [StatusPedido.Finalizado],
+    [StatusPedido.Finalizado]: [],
     [StatusPedido.Cancelado]: [],
   };
 
-  checkTranstionStatus(
+  checkTransactionStatus(
     statusAtual: StatusPedido,
     novoStatus: StatusPedido,
   ): boolean {
@@ -120,15 +125,17 @@ export class PedidoService implements PedidoServicePort {
 
   async changeStatus(id: number, status: StatusPedido) {
     const pedido = await this.persist.get(id);
-    if (!this.checkTranstionStatus(pedido.status, status)) {
+    if (!this.checkTransactionStatus(pedido.status, status)) {
       throw new RegraNegocioException('Transição de status inválida');
     }
     await this.persist.changeStatus(id, status);
     return 'Pedido alterado com sucesso';
   }
 
-  getPedidoByCliente(cpf: any): Promise<Pedido[]> {
-    return this.persist.getPedidosByCliente(cpf);
+  async getPedidoByCliente(cpf: any): Promise<Pedido[]> {
+    const pedidos = await this.persist.getPedidosByCliente(cpf);
+    this.addAwaitTimeOnOrders(pedidos);
+    return pedidos;
   }
 
   getListStatus(): string[] {

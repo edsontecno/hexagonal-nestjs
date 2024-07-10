@@ -13,6 +13,7 @@ import { PedidoServicePort } from 'src/application/pedido/ports/input/PedidoServ
 import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
+  ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -33,9 +34,10 @@ export class PedidoController {
   constructor(private readonly adapter: PedidoServicePort) {}
 
   @Post()
+  @ApiOperation({ summary: 'Cadastrar pedido' })
   @ApiResponse({
     status: 201,
-    description: 'Pedido salvo',
+    description: 'Cadastrar pedido',
   })
   async save(@Body() pedidoDto: CreatePedidoDto) {
     const pedido = new Pedido();
@@ -44,6 +46,7 @@ export class PedidoController {
   }
 
   @Get('/status/:status')
+  @ApiOperation({ summary: 'Listar pedidos por status' })
   @ApiResponse({
     status: 200,
     description: 'Lista de pedidos por status',
@@ -54,9 +57,10 @@ export class PedidoController {
   }
 
   @Get('/cliente/:cpf')
+  @ApiOperation({ summary: 'Listar pedidos de um cliente' })
   @ApiResponse({
     status: 200,
-    description: 'Lista de pedidos por status',
+    description: 'Lista de pedidos por cliente',
     type: [PedidoDto],
   })
   getPedidoByCliente(@Param('cpf') cpf: string) {
@@ -64,6 +68,7 @@ export class PedidoController {
   }
 
   @Put(':id/alterar_status/:status')
+  @ApiOperation({ summary: 'Alterar o status de um determinado pedido' })
   @ApiResponse({
     status: 200,
     description: 'Lista de pedidos por status',
@@ -81,6 +86,7 @@ export class PedidoController {
   }
 
   @Get('status')
+  @ApiOperation({ summary: 'Listar todos os status disponíveis' })
   @ApiResponse({
     status: 200,
     description: 'Lista de status disponíveis para o pedido',

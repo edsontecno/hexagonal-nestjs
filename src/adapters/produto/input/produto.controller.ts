@@ -15,6 +15,7 @@ import { ProdutoServicePort } from 'src/application/produto/ports/input/ProdutoS
 import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
+  ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -32,6 +33,7 @@ export class ProdutoController {
   constructor(private readonly adapter: ProdutoServicePort) {}
 
   @Post()
+  @ApiOperation({ summary: 'Cadastrar produto' })
   @ApiResponse({
     status: 201,
     description: 'Produto salvo',
@@ -43,9 +45,10 @@ export class ProdutoController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Consultar produto por id' })
   @ApiResponse({
     status: 200,
-    description: 'Consultar cliente por cpf',
+    description: 'Consultar produto por id',
     type: CreateProdutoDto,
   })
   findOne(@Param('id') id: number) {
@@ -53,9 +56,10 @@ export class ProdutoController {
   }
 
   @Get('/categoria/:id')
+  @ApiOperation({ summary: 'Consultar produto por categoria' })
   @ApiResponse({
     status: 200,
-    description: 'Consultar cliente por cpf',
+    description: 'Consultar produto por categoria',
     type: [CreateProdutoDto],
   })
   findAllByCategoria(@Param('id') id: number) {
@@ -63,9 +67,10 @@ export class ProdutoController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Atualizar produto por id' })
   @ApiResponse({
     status: 200,
-    description: 'Consultar cliente por cpf',
+    description: 'Atualizar produto por categoria',
     type: CreateProdutoDto,
   })
   update(@Param('id') id: number, @Body() produtoDto: CreateProdutoDto) {
@@ -75,6 +80,7 @@ export class ProdutoController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Excluir produto por id' })
   @ApiResponse({
     status: 204,
     description: 'Excluir produto por id',

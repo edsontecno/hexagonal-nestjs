@@ -8,7 +8,7 @@ export class Pedido1719868093380 implements MigrationInterface {
       `CREATE TABLE "itens_pedidos" ("id" SERIAL NOT NULL, "quantidade" integer NOT NULL, "preco_venda" numeric(10,2) NOT NULL, "pedidoId" integer, "produtoId" integer, CONSTRAINT "PK_d93e780d333fe5d91e43797e8b5" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TYPE "public"."pedidos_status_enum" AS ENUM('pendente', 'pagamento processado', 'em andamento', 'concluído', 'entregue', 'cancelado')`,
+      `CREATE TYPE "public"."pedidos_status_enum" AS ENUM('pendente', 'recebido', 'em preparação', 'pronto', 'finalizado', 'cancelado')`,
     );
     await queryRunner.query(
       `CREATE TABLE "pedidos" ("id" SERIAL NOT NULL, "total" numeric(10,2) NOT NULL, "status" "public"."pedidos_status_enum" NOT NULL DEFAULT 'pendente', "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "clienteId" integer, CONSTRAINT "PK_ebb5680ed29a24efdc586846725" PRIMARY KEY ("id"))`,

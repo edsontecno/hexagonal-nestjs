@@ -15,6 +15,7 @@ import { Categoria } from 'src/application/categoria/core/domain/Categoria';
 import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
+  ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -33,17 +34,22 @@ export class CategoriaController {
   constructor(private readonly adapter: CategoriaServicePort) {}
 
   @Post()
-  create(@Body() createCategoriaDto: CreateCategoriaDto) {
+  @ApiOperation({ summary: 'Cadastrar categoria' })
+  @ApiResponse({
+    status: 201,
+    description: 'Cadastro de categoria',
+  })
+  async create(@Body() createCategoriaDto: CreateCategoriaDto) {
     const categoria = new Categoria();
     Object.assign(categoria, createCategoriaDto);
-
-    return this.adapter.save(categoria);
+    await this.adapter.save(categoria);
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Consultar categoria por id' })
   @ApiResponse({
     status: 200,
-    description: 'Consultar cliente por cpf',
+    description: 'Consultar categoria por id',
     type: CategoriaDto,
   })
   findOne(@Param('id') id: number) {
@@ -51,6 +57,12 @@ export class CategoriaController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Atualizar categoria por id' })
+  @ApiResponse({
+    status: 200,
+    description: 'Atualizar categoria por id',
+    type: CategoriaDto,
+  })
   update(
     @Param('id') id: number,
     @Body() updateCategoriaDto: CreateCategoriaDto,
@@ -61,6 +73,7 @@ export class CategoriaController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Deletar categoria' })
   @ApiResponse({
     status: 204,
     description: 'Excluir categoria por id',

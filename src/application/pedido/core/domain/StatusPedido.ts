@@ -1,8 +1,8 @@
 export enum StatusPedido {
   Pendente = 'pendente',
-  PagamentoProcessado = 'pagamento processado',
-  EmAndamento = 'em andamento',
-  Concluido = 'concluído',
-  Entregue = 'entregue',
+  Recebido = 'recebido',
+  EmAndamento = 'em preparação',
+  Pronto = 'pronto',
+  Finalizado = 'finalizado',
   Cancelado = 'cancelado',
 }

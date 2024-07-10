@@ -5,6 +5,7 @@ import { ClientePersistPort } from '../../ports/output/ClientePersistPort';
 import { RegraNegocioException } from 'src/filtros/RegraNegocioException';
 import { cpf } from 'cpf-cnpj-validator';
 import { Service } from 'src/application/service/service';
+import { emailIsValid } from 'src/application/utils/utils';
 
 @Injectable()
 export class ClienteService extends Service implements ClienteServicePort {
@@ -27,6 +28,10 @@ export class ClienteService extends Service implements ClienteServicePort {
   private validarRegrasCliente(cliente: Cliente) {
     this.validField(cliente.nome, 'nome');
     this.validField(cliente.email, 'email');
+
+    if (!emailIsValid(cliente.email)) {
+      throw new RegraNegocioException('O email informado é inválido');
+    }
 
     this.validarCpfObrigatorio(cliente.cpf);
 
@@ -67,8 +72,9 @@ export class ClienteService extends Service implements ClienteServicePort {
   }
 
   async updateCliente(cpf: string, cliente: Cliente): Promise<Cliente> {
-    this.validarRegrasCliente(cliente);
-    await this.cpfExiste(cpf);
-    return this.persist.updateCliente(cpf, cliente);
+    const clientePesquisado = await this.cpfExiste(cpf);
+    Object.assign(clientePesquisado, cliente);
+    this.validarRegrasCliente(clientePesquisado);
+    return this.persist.updateCliente(cpf, clientePesquisado);
   }
 }
