@@ -29,7 +29,7 @@ import { Category } from 'src/application/category/core/domain/Category';
   type: ErrorResponseBody,
 })
 @ApiInternalServerErrorResponse({ description: 'Erro do servidor' })
-@Controller('categoria')
+@Controller('category')
 export class CategoryController {
   constructor(private readonly adapter: CategoryServicePort) {}
 

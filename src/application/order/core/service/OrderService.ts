@@ -63,7 +63,7 @@ export class OrderService implements OrderServicePort {
       const newItem = new OrderItem();
       newItem.productId = element.productId;
       newItem.quantidade = element.quantidade;
-      newItem.precoVenda = parseFloat(product.preco) * element.quantidade;
+      newItem.precoVenda = parseFloat(product.price) * element.quantidade;
       orderProcessado.itens.push(newItem);
       orderProcessado.total += newItem.precoVenda;
     }

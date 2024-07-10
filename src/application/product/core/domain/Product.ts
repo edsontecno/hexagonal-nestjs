@@ -1,8 +1,8 @@
 export class Product {
   readonly id: number;
-  readonly nome: string;
-  readonly descricao: string;
-  readonly preco: string;
-  readonly imagem: string;
-  readonly categoria: number;
+  readonly name: string;
+  readonly description: string;
+  readonly price: string;
+  readonly image: string;
+  readonly category: number;
 }

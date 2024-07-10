@@ -22,7 +22,7 @@ import { ErrorResponseBody } from 'src/filtros/filtro-de-excecao-global';
 import { Response } from 'express';
 import { CreateProductDto } from '../output/dto/create-product.dto';
 
-@Controller('produto')
+@Controller('product')
 @ApiTags('Produto')
 @ApiBadRequestResponse({
   description: 'Detalhe do erro',

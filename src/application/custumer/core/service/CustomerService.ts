@@ -26,7 +26,7 @@ export class CustomerService extends Service implements CustomerServicePort {
   }
 
   private validarRegrasCustomer(customer: Customer) {
-    this.validField(customer.nome, 'nome');
+    this.validField(customer.name, 'nome');
     this.validField(customer.email, 'email');
 
     if (!emailIsValid(customer.email)) {

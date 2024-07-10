@@ -5,7 +5,7 @@ export class CustomerOrderDTO {
   id?: number;
 
   @ApiProperty()
-  nome?: string;
+  name?: string;
 
   @ApiProperty()
   email: string;

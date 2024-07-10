@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CustomerDTO {
   @ApiProperty()
-  nome?: string;
+  name?: string;
 
   @ApiProperty()
   email: string;

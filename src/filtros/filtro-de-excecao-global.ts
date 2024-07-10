@@ -23,6 +23,7 @@ export class FiltroDeExcecaoGlobal implements ExceptionFilter {
   constructor(private adapterHost: HttpAdapterHost) {}
 
   catch(excecao: unknown, host: ArgumentsHost) {
+    console.log(excecao);
     const { httpAdapter } = this.adapterHost;
 
     const contexto = host.switchToHttp();

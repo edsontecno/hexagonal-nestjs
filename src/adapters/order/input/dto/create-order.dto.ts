@@ -6,5 +6,5 @@ export class CreateOrderDto {
   itens: OrderItemDto[];
 
   @ApiProperty()
-  customerId: number;
+  customerId: string;
 }

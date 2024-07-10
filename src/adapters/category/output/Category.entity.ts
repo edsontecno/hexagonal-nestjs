@@ -7,11 +7,11 @@ export class CategoryEntity {
   id: number;
 
   @Column({ name: 'nome', length: 100, nullable: false })
-  nome: string;
+  name: string;
 
   @Column({ name: 'descricao', length: 500, nullable: false })
-  descricao: string;
+  description: string;
 
-  @OneToMany(() => ProductEntity, (product) => product.categoria)
+  @OneToMany(() => ProductEntity, (product) => product.category)
   products: ProductEntity[];
 }

@@ -22,12 +22,12 @@ export class ProductService extends Service implements ProductServicePort {
   }
 
   async checkFields(product: Product): Promise<void> {
-    this.validField(product.nome, 'nome');
-    this.validField(product.descricao, 'descrição');
-    this.validField(product.preco, 'preço');
-    this.validField(product.categoria, 'categoria');
+    this.validField(product.name, 'nome');
+    this.validField(product.description, 'descrição');
+    this.validField(product.price, 'preço');
+    this.validField(product.category, 'categoria');
 
-    const category = await this.findCategoryById(product.categoria);
+    const category = await this.findCategoryById(product.category);
     if (category.id === undefined) {
       throw new BusinessRuleException('A categoria informada é inválida');
     }

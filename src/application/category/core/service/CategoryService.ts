@@ -17,15 +17,15 @@ export class CategoryService extends Service implements CategoryServicePort {
   }
 
   private checkFields(category: Category) {
-    this.validField(category.nome, 'nome');
-    this.validField(category.descricao, 'descrição');
+    this.validField(category.name, 'nome');
+    this.validField(category.description, 'descrição');
   }
 
   async get(id: number): Promise<Category> {
     const category = await this.persist.get(id);
     this.checkField(
       category.id,
-      'Não foi possível encontrar a category informada',
+      'Não foi possível encontrar a categoria informada',
     );
     return category;
   }
@@ -33,7 +33,7 @@ export class CategoryService extends Service implements CategoryServicePort {
     const category = await this.persist.getSigle(id);
     this.checkField(
       category.id,
-      'Não foi possível encontrar a category informada',
+      'Não foi possível encontrar a categoria informada',
     );
     return category;
   }

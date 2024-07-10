@@ -50,7 +50,7 @@ export class ProductPersistAdapter implements ProductPersistPort {
   async findAllByCategory(idCategory: number): Promise<Product[]> {
     const result = [];
     const list = await this.repository.find({
-      where: { categoria: { id: idCategory } },
+      where: { category: { id: idCategory } },
     });
     list.forEach((element) => {
       const newProduct = new Product();

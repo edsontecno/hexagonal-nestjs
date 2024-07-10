@@ -1,5 +1,11 @@
 import { CategoryEntity } from '../../category/output/Category.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'produtos' })
 export class ProductEntity {
@@ -7,10 +13,10 @@ export class ProductEntity {
   id: number;
 
   @Column({ name: 'nome', length: 100, nullable: false })
-  nome: string;
+  name: string;
 
   @Column({ name: 'descricao', length: 500, nullable: false })
-  descricao: string;
+  description: string;
 
   @Column({
     name: 'preco',
@@ -19,11 +25,12 @@ export class ProductEntity {
     precision: 10,
     scale: 2,
   })
-  preco: number;
+  price: number;
 
   @Column({ name: 'imagem', type: 'text', nullable: true })
-  imagem: string;
+  image: string;
 
-  @ManyToOne(() => CategoryEntity, (categoria) => categoria.products)
-  categoria: CategoryEntity;
+  @ManyToOne(() => CategoryEntity, (category) => category.products)
+  @JoinColumn({ name: 'categoriaId' })
+  category: CategoryEntity;
 }
