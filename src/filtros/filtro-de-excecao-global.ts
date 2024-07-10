@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { RegraNegocioException } from './RegraNegocioException';
+import { BusinessRuleException } from './business-rule-exception';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ErrorResponseBody {
@@ -23,8 +23,6 @@ export class FiltroDeExcecaoGlobal implements ExceptionFilter {
   constructor(private adapterHost: HttpAdapterHost) {}
 
   catch(excecao: unknown, host: ArgumentsHost) {
-    console.log(excecao);
-
     const { httpAdapter } = this.adapterHost;
 
     const contexto = host.switchToHttp();
@@ -37,8 +35,8 @@ export class FiltroDeExcecaoGlobal implements ExceptionFilter {
       path: httpAdapter.getRequestUrl(requisicao),
     };
 
-    if (excecao instanceof RegraNegocioException) {
-      const regraNegocio = excecao as RegraNegocioException;
+    if (excecao instanceof BusinessRuleException) {
+      const regraNegocio = excecao as BusinessRuleException;
 
       status = regraNegocio.httpStatus || HttpStatus.INTERNAL_SERVER_ERROR;
       body = {

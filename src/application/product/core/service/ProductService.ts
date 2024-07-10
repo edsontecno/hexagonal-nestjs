@@ -1,0 +1,65 @@
+import { Injectable } from '@nestjs/common';
+import { ProductServicePort } from '../../ports/input/ProductServicePort';
+import { Product } from '../domain/Product';
+import { ProductPersistPort } from '../../ports/output/ProductPersistPort';
+import { BusinessRuleException } from 'src/filtros/business-rule-exception';
+import { Service } from 'src/application/service/service';
+import { Category } from 'src/application/category/core/domain/Category';
+
+@Injectable()
+export class ProductService extends Service implements ProductServicePort {
+  constructor(private persist: ProductPersistPort) {
+    super();
+  }
+
+  findAllByCategory(idCategory: number): Promise<Product[]> {
+    return this.persist.findAllByCategory(idCategory);
+  }
+
+  async save(product: Product): Promise<number> {
+    await this.checkFields(product);
+    return this.persist.save(product);
+  }
+
+  async checkFields(product: Product): Promise<void> {
+    this.validField(product.nome, 'nome');
+    this.validField(product.descricao, 'descrição');
+    this.validField(product.preco, 'preço');
+    this.validField(product.categoria, 'categoria');
+
+    const category = await this.findCategoryById(product.categoria);
+    if (category.id === undefined) {
+      throw new BusinessRuleException('A categoria informada é inválida');
+    }
+  }
+
+  findCategoryById(categoryId: number): Promise<Category> {
+    return this.persist.findCategoryById(categoryId);
+  }
+
+  async get(id: number): Promise<Product> {
+    const product = await this.persist.get(id);
+    if (product.id === undefined) {
+      throw new BusinessRuleException('Produto não localizado');
+    }
+    return this.persist.get(id);
+  }
+
+  async delete(id: number): Promise<void> {
+    try {
+      await this.persist.delete(id);
+    } catch (error) {
+      if (error.message === 'PRODUTO_VINCULADO') {
+        throw new BusinessRuleException(
+          'Não é possível deletar produtos vinculados à pedidos',
+        );
+      }
+    }
+    return;
+  }
+
+  async update(id: number, product: Product): Promise<Product> {
+    await this.checkFields(product);
+    return this.persist.update(id, product);
+  }
+}

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ClienteModule } from './cliente/cliente.module';
-import { CategoriaModule } from './categoria/categoria.module';
-import { ProdutoModule } from './produto/produto.module';
-import { PedidoModule } from './pedido/pedido.module';
+import { CategoryModule } from './category/category.module';
+import { ProductModule } from './product/product.module';
+import { OrderModule } from './order/order.module';
+import { CustomerModule } from './custumer/custumer.module';
 
 @Module({
-  imports: [ClienteModule, CategoriaModule, ProdutoModule, PedidoModule],
+  imports: [CustomerModule, CategoryModule, ProductModule, OrderModule],
 })
 export class AdaptersModule {}
