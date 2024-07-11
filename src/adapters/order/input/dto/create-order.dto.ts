@@ -3,7 +3,7 @@ import { OrderItemDto } from './order-item.dto';
 
 export class CreateOrderDto {
   @ApiProperty({ type: [OrderItemDto] })
-  itens: OrderItemDto[];
+  items: OrderItemDto[];
 
   @ApiProperty()
   customerId: string;

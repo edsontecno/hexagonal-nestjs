@@ -1,8 +1,8 @@
 export enum OrderStatus {
-  Pendente = 'pendente',
-  Recebido = 'recebido',
-  EmAndamento = 'em preparação',
-  Pronto = 'pronto',
-  Finalizado = 'finalizado',
-  Cancelado = 'cancelado',
+  Pending = 'pendente',
+  Received = 'recebido',
+  InProgress = 'em preparação',
+  Ready = 'pronto',
+  Fineshed = 'finalizado',
+  Canceled = 'cancelado',
 }

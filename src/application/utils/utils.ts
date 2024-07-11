@@ -24,7 +24,9 @@ export const emailIsValid = (email: string) => {
 };
 
 export const copyFields = (origin, target) => {
+  console.log(target, Object.keys(target));
   Object.keys(target).forEach((chave) => {
+    console.log(chave);
     if (origin.hasOwnProperty(chave)) {
       target[chave] = origin[chave];
     }

@@ -19,7 +19,7 @@ export class OrderDto {
   updatedAt: string;
 
   @ApiProperty({ type: [OrderItemDto] })
-  itensOrder: OrderItemDto[];
+  itemsOrder: OrderItemDto[];
 
   @ApiProperty()
   customer: CustomerOrderDTO;

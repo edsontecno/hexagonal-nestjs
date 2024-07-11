@@ -19,10 +19,10 @@ import {
 import { ErrorResponseBody } from 'src/filtros/filtro-de-excecao-global';
 import { Response } from 'express';
 import { CustomerServicePort } from 'src/application/custumer/ports/input/CustomerServicePort';
-import { CustomerDTO } from '../output/dto/ClienteDto';
+import { CustomerDTO } from './dto/CustomerDto';
 import { Customer } from 'src/application/custumer/core/domain/Customer';
 
-@Controller('cliente')
+@Controller('custumer')
 @ApiTags('Cliente')
 @ApiBadRequestResponse({
   description: 'Detalhe do erro',

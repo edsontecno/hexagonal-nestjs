@@ -23,16 +23,16 @@ export class OrderPersistAdapter implements OrderPersistPort {
 
   async save(order: OrderProcess): Promise<number> {
     const entity = new OrderEntity();
-    entity.cliente = new CustomerEntity();
-    entity.cliente.id = order.customerId;
-    entity.itensOrder = [];
-    order.itens.forEach((element) => {
+    entity.customer = new CustomerEntity();
+    entity.customer.id = order.customerId;
+    entity.itemsOrder = [];
+    order.items.forEach((element) => {
       const itemOrder = new OrderItemEntity();
       itemOrder.product = new ProductEntity();
       itemOrder.product.id = element.productId;
-      itemOrder.quantidade = element.quantidade;
-      itemOrder.precoVenda = element.precoVenda;
-      entity.itensOrder.push(itemOrder);
+      itemOrder.quantidade = element.amount;
+      itemOrder.precoVenda = element.salePrice;
+      entity.itemsOrder.push(itemOrder);
     });
     Object.assign(entity, order);
 
@@ -53,7 +53,7 @@ export class OrderPersistAdapter implements OrderPersistPort {
   async getAllByStatus(status: OrderStatus): Promise<Order[]> {
     const ordersEntity = await this.repository.find({
       where: { status },
-      relations: ['itensOrder', 'customer', 'itensOrder.product'],
+      relations: ['itemsOrder', 'customer', 'itemsOrder.product'],
     });
     const orders = [];
     for (const entity of ordersEntity) {
@@ -73,11 +73,11 @@ export class OrderPersistAdapter implements OrderPersistPort {
   async getOrdersByCustomer(cpf: string): Promise<Order[]> {
     const ordersEntity = await this.repository.find({
       where: {
-        cliente: {
+        customer: {
           cpf,
         },
       },
-      relations: ['itensOrder', 'customer', 'itensOrder.product'],
+      relations: ['itemsOrder', 'customer', 'itemsOrder.product'],
     });
     const orders: Order[] = [];
     for (const item of ordersEntity) {

@@ -20,7 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { ErrorResponseBody } from 'src/filtros/filtro-de-excecao-global';
 import { Response } from 'express';
-import { CreateProductDto } from '../output/dto/create-product.dto';
+import { CreateProductDto } from './dto/create-product.dto';
 
 @Controller('product')
 @ApiTags('Produto')

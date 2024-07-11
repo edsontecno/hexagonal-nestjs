@@ -9,7 +9,7 @@ import {
   HttpStatus,
   Res,
 } from '@nestjs/common';
-import { CategoryDto } from '../output/dto/category.dto';
+import { CategoryDto } from './dto/category.dto';
 import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
@@ -19,7 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { ErrorResponseBody } from 'src/filtros/filtro-de-excecao-global';
 import { Response } from 'express';
-import { CreateCategoryDto } from '../output/dto/create-category.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
 import { CategoryServicePort } from 'src/application/category/ports/input/CategoryServicePort';
 import { Category } from 'src/application/category/core/domain/Category';
 

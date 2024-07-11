@@ -1,6 +1,12 @@
 import { ProductEntity } from 'src/adapters/product/output/Product.entity';
 import { OrderEntity } from './Order.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'itens_pedidos' })
 export class OrderItemEntity {
@@ -19,14 +25,16 @@ export class OrderItemEntity {
   })
   precoVenda: number;
 
-  @ManyToOne(() => OrderEntity, (order) => order.itensOrder, {
+  @ManyToOne(() => OrderEntity, (order) => order.itemsOrder, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  pedido: OrderEntity;
+  @JoinColumn({ name: 'pedidoId' })
+  order: OrderEntity;
 
   @ManyToOne(() => ProductEntity, {
     cascade: ['update'],
   })
+  @JoinColumn({ name: 'produtoId' })
   product: ProductEntity;
 }

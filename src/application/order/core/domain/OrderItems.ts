@@ -1,5 +1,5 @@
 export class OrderItem {
   productId: number;
-  quantidade: number;
-  precoVenda: number;
+  amount: number;
+  salePrice: number;
 }

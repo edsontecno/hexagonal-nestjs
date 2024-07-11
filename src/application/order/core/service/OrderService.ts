@@ -13,10 +13,11 @@ export class OrderService implements OrderServicePort {
   constructor(private persist: OrderPersistPort) {}
 
   async save(order: Order): Promise<number> {
+    console.log(order);
     const orderProcess = new OrderProcess();
-    orderProcess.status = OrderStatus.Pendente;
+    orderProcess.status = OrderStatus.Pending;
     orderProcess.total = 0;
-    orderProcess.itens = [];
+    orderProcess.items = [];
 
     if (order.customerId) {
       const customer = await this.persist.getCustomer(order.customerId);
@@ -29,7 +30,7 @@ export class OrderService implements OrderServicePort {
       orderProcess.customerId = customer.id;
     }
 
-    if (order.itens.length < 1) {
+    if (order.items.length < 1) {
       throw new BusinessRuleException(
         'Nenhum produto foi adicionado ao pedido',
       );
@@ -44,7 +45,7 @@ export class OrderService implements OrderServicePort {
   }
 
   private async prepareItems(order: Order, orderProcessado: OrderProcess) {
-    for (const element of order.itens) {
+    for (const element of order.items) {
       if (!element.productId) {
         throw new BusinessRuleException('Por favor informe o produto desejado');
       }
@@ -55,17 +56,17 @@ export class OrderService implements OrderServicePort {
           `O produto com id '${element.productId}' não existe na base de dados`,
         );
       }
-      if (!element.quantidade || element.quantidade < 1) {
+      if (!element.amount || element.amount < 1) {
         throw new BusinessRuleException(
           'A quantidade mínima de um produto é 1',
         );
       }
       const newItem = new OrderItem();
       newItem.productId = element.productId;
-      newItem.quantidade = element.quantidade;
-      newItem.precoVenda = parseFloat(product.price) * element.quantidade;
-      orderProcessado.itens.push(newItem);
-      orderProcessado.total += newItem.precoVenda;
+      newItem.amount = element.amount;
+      newItem.salePrice = parseFloat(product.price) * element.amount;
+      orderProcessado.items.push(newItem);
+      orderProcessado.total += newItem.salePrice;
     }
   }
 
@@ -92,7 +93,7 @@ export class OrderService implements OrderServicePort {
     console.log('Processando pagamento....');
     await this.awaitPayment();
     console.log('Pagamento processado');
-    this.persist.changeOrderStatus(orderId, OrderStatus.Recebido);
+    this.persist.changeOrderStatus(orderId, OrderStatus.Received);
   }
 
   awaitPayment() {
@@ -104,12 +105,12 @@ export class OrderService implements OrderServicePort {
   }
 
   private statusPermitidos = {
-    [OrderStatus.Pendente]: [OrderStatus.Recebido, OrderStatus.Cancelado],
-    [OrderStatus.Recebido]: [OrderStatus.EmAndamento, OrderStatus.Cancelado],
-    [OrderStatus.EmAndamento]: [OrderStatus.Pronto, OrderStatus.Cancelado],
-    [OrderStatus.Pronto]: [OrderStatus.Finalizado],
-    [OrderStatus.Finalizado]: [],
-    [OrderStatus.Cancelado]: [],
+    [OrderStatus.Pending]: [OrderStatus.Received, OrderStatus.Canceled],
+    [OrderStatus.Received]: [OrderStatus.InProgress, OrderStatus.Canceled],
+    [OrderStatus.InProgress]: [OrderStatus.Ready, OrderStatus.Canceled],
+    [OrderStatus.Ready]: [OrderStatus.Fineshed],
+    [OrderStatus.Fineshed]: [],
+    [OrderStatus.Canceled]: [],
   };
 
   checkTransactionStatus(
@@ -126,7 +127,7 @@ export class OrderService implements OrderServicePort {
       throw new BusinessRuleException('Transição de status inválida');
     }
     await this.persist.changeStatus(id, status);
-    return 'Order alterado com sucesso';
+    return 'Pedido alterado com sucesso';
   }
 
   async getOrderByCustomer(cpf: any): Promise<Order[]> {

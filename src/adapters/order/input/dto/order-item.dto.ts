@@ -5,5 +5,5 @@ export class OrderItemDto {
   productId: number;
 
   @ApiProperty()
-  quantidade: number;
+  amount: number;
 }

@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -26,12 +27,13 @@ export class OrderEntity {
   total: number;
 
   @ManyToOne(() => CustomerEntity, { nullable: true })
-  cliente: CustomerEntity;
+  @JoinColumn({ name: 'clienteId' })
+  customer: CustomerEntity;
 
   @Column({
     type: 'enum',
     enum: OrderStatus,
-    default: OrderStatus.Pendente,
+    default: OrderStatus.Pending,
   })
   status: string;
 
@@ -41,8 +43,8 @@ export class OrderEntity {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: string;
 
-  @OneToMany(() => OrderItemEntity, (itemOrder) => itemOrder.pedido, {
+  @OneToMany(() => OrderItemEntity, (itemOrder) => itemOrder.order, {
     cascade: true,
   })
-  itensOrder: OrderItemEntity[];
+  itemsOrder: OrderItemEntity[];
 }

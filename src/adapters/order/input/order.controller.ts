@@ -29,7 +29,7 @@ import { OrderServicePort } from 'src/application/order/ports/input/OrderService
   type: ErrorResponseBody,
 })
 @ApiInternalServerErrorResponse({ description: 'Erro do servidor' })
-@Controller('pedidos')
+@Controller('orders')
 export class OrderController {
   constructor(private readonly adapter: OrderServicePort) {}
 

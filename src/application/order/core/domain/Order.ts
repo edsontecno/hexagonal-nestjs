@@ -4,8 +4,8 @@ import { OrderItem } from './OrderItems';
 import { OrderStatus } from './OrderStatus';
 
 export class Order {
-  readonly itens: [OrderItem];
-  readonly customerId: string;
-  readonly status: OrderStatus;
-  readonly awaitTime: string;
+  items: [OrderItem];
+  customerId: string;
+  status: OrderStatus;
+  awaitTime: string;
 }
