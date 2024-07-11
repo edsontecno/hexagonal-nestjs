@@ -67,7 +67,7 @@ export class OrderController {
     return this.adapter.getOrderByCustomer(cpf);
   }
 
-  @Put(':id/alterar_status/:status')
+  @Put(':id/change_status/:status')
   @ApiOperation({ summary: 'Alterar o status de um determinado pedidos' })
   @ApiResponse({
     status: 200,

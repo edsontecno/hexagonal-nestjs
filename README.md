@@ -28,30 +28,21 @@ Todos os endpoint estão documentos utilizando o Swagger, o endereço disponíve
 
 ```
   http://localhost:3000/api-docs
-```
+```  
 
-# Exclusivo apenas para desenvolvedores
-Para desenvolvedore executar o comando:
+# Aplicação
 
-```
-docker-compose -f docker-compose-dev.yml up
-```
+## Gerenciamento de categoria
+Todo o gerenciamento de categorias de produtos estão disponíveis nos endpoints [/category](http://localhost:3000/api-docs#/Categoria)
 
-## Nova migração:
-Para criar uma migração execute o comando, trocando o valor <nome da migration> pelo nome da migração a ser criada
 
-```
-npm run migration:generate --name=<nome da migration>
-```
+## Gerenciamentos de clientes
+O gerenciamento de cliente estão disponíveis nos endpoints [/customer](http://localhost:3000/api-docs#/Cliente)
 
-## Rodando uma migração
-Para rodar uma migração já existente execute o comando:
-```
-npm run migration:run
-```
+## Gerenciamentos de Produtos
+O gerenciamento de produtos estão disponíveis nos endpoints [/prodcut](http://localhost:3000/api-docs#/Produto)
 
-## Revertendo uma migração
-para reverter a última migração criada, execute o comando:
-```
-npm run migration:revert
-```
+## Gerenciamentos de Pedido
+O gerenciamento de pedido estão disponíveis nos endpoints [/order](http://localhost:3000/api-docs#/Pedidos).
+
+Para alteração de status de um pedido existe o endpoint [/orders/{id}/change_status/{status}](http://localhost:3000/api-docs#/Pedidos/OrderController_changeStatus), para saber o status correto existe o endpoint [/orders/status](http://localhost:3000/api-docs#/Pedidos/OrderController_getListStatus)

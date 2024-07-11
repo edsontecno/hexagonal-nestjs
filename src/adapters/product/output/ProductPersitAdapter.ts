@@ -2,15 +2,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProductPersistPort } from 'src/application/product/ports/output/ProductPersistPort';
 import { QueryFailedError, Repository } from 'typeorm';
 import { Product } from 'src/application/product/core/domain/Product';
-import { CategoryServicePort } from 'src/application/category/ports/input/CategoryServicePort';
-import { Category } from 'src/application/category/core/domain/Category';
 import { ProductEntity } from './Product.entity';
 
 export class ProductPersistAdapter implements ProductPersistPort {
   constructor(
     @InjectRepository(ProductEntity)
     private readonly repository: Repository<ProductEntity>,
-    private readonly categoryService: CategoryServicePort,
   ) {}
 
   async save(product: Product): Promise<number> {
@@ -58,9 +55,5 @@ export class ProductPersistAdapter implements ProductPersistPort {
       result.push(newProduct);
     });
     return result;
-  }
-
-  findCategoryById(categoryId: number): Promise<Category> {
-    return this.categoryService.get(categoryId);
   }
 }

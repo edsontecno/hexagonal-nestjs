@@ -4,11 +4,14 @@ import { Product } from '../domain/Product';
 import { ProductPersistPort } from '../../ports/output/ProductPersistPort';
 import { BusinessRuleException } from 'src/filtros/business-rule-exception';
 import { Service } from 'src/application/service/service';
-import { Category } from 'src/application/category/core/domain/Category';
+import { CategoryPersistPort } from 'src/application/category/ports/output/CategoryPersistPort';
 
 @Injectable()
 export class ProductService extends Service implements ProductServicePort {
-  constructor(private persist: ProductPersistPort) {
+  constructor(
+    private persist: ProductPersistPort,
+    private categoryService: CategoryPersistPort,
+  ) {
     super();
   }
 
@@ -27,14 +30,10 @@ export class ProductService extends Service implements ProductServicePort {
     this.validField(product.price, 'preço');
     this.validField(product.category, 'categoria');
 
-    const category = await this.findCategoryById(product.category);
+    const category = await this.categoryService.getSigle(product.category);
     if (category.id === undefined) {
       throw new BusinessRuleException('A categoria informada é inválida');
     }
-  }
-
-  findCategoryById(categoryId: number): Promise<Category> {
-    return this.persist.findCategoryById(categoryId);
   }
 
   async get(id: number): Promise<Product> {

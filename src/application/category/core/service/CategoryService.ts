@@ -48,6 +48,7 @@ export class CategoryService extends Service implements CategoryServicePort {
     }
     return await this.persist.delete(id);
   }
+
   update(id: number, category: Category): Promise<Category> {
     this.checkFields(category);
     return this.persist.update(id, category);

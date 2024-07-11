@@ -60,13 +60,6 @@ import { ProductPersistAdapter } from '../product/output/ProductPersitAdapter';
       useClass: CategoryPersistAdapter,
     },
   ],
-  exports: [
-    ...OrderOutput,
-    ...OrderInput,
-    {
-      provide: ProductServicePort,
-      useClass: ProductService,
-    },
-  ],
+  exports: [...OrderOutput, ...OrderInput],
 })
 export class OrderModule {}

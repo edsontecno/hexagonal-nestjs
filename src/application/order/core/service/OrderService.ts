@@ -7,10 +7,16 @@ import { OrderStatus } from '../domain/OrderStatus';
 import { OrderPersistPort } from '../../ports/output/OrderPersistPort';
 import { OrderServicePort } from '../../ports/input/OrderServicePort';
 import { OrderItem } from '../domain/OrderItems';
+import { ProductPersistPort } from 'src/application/product/ports/output/ProductPersistPort';
+import { CustomerServicePort } from 'src/application/custumer/ports/input/CustomerServicePort';
 
 @Injectable()
 export class OrderService implements OrderServicePort {
-  constructor(private persist: OrderPersistPort) {}
+  constructor(
+    private persist: OrderPersistPort,
+    private productService: ProductPersistPort,
+    private costumerService: CustomerServicePort,
+  ) {}
 
   async save(order: Order): Promise<number> {
     console.log(order);
@@ -20,7 +26,7 @@ export class OrderService implements OrderServicePort {
     orderProcess.items = [];
 
     if (order.customerId) {
-      const customer = await this.persist.getCustomer(order.customerId);
+      const customer = await this.costumerService.getCustomer(order.customerId);
 
       if (customer.id === undefined) {
         throw new BusinessRuleException(
@@ -50,7 +56,8 @@ export class OrderService implements OrderServicePort {
         throw new BusinessRuleException('Por favor informe o produto desejado');
       }
 
-      const product = await this.persist.getProductById(element.productId);
+      const product = await this.productService.get(element.productId);
+
       if (product.id === undefined) {
         throw new BusinessRuleException(
           `O produto com id '${element.productId}' não existe na base de dados`,
