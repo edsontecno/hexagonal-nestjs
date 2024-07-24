@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfigService } from './adapters/config/postgres.config.service';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
-import { FiltroDeExcecaoGlobal } from './filtros/filtro-de-excecao-global';
+import { FilterExceptionGlobal } from './filtros/filter-exception-global';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { FiltroDeExcecaoGlobal } from './filtros/filtro-de-excecao-global';
   providers: [
     {
       provide: APP_FILTER,
-      useClass: FiltroDeExcecaoGlobal,
+      useClass: FilterExceptionGlobal,
     },
   ],
 })

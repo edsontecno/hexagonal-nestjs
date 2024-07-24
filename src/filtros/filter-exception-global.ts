@@ -19,7 +19,7 @@ export class ErrorResponseBody {
 }
 
 @Catch()
-export class FiltroDeExcecaoGlobal implements ExceptionFilter {
+export class FilterExceptionGlobal implements ExceptionFilter {
   constructor(private adapterHost: HttpAdapterHost) {}
 
   catch(excecao: unknown, host: ArgumentsHost) {

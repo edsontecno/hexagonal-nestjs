@@ -18,7 +18,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ErrorResponseBody } from 'src/filtros/filtro-de-excecao-global';
+import { ErrorResponseBody } from 'src/filtros/filter-exception-global';
 import { Response } from 'express';
 import { CreateProductDto } from './dto/create-product.dto';
 
